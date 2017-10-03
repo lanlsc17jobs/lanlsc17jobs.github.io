@@ -1,0 +1,46 @@
+<html>
+<head>
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"> </script>
+
+<script>
+
+function changeVis(elem) {
+	var x = document.getElementById("desc" + elem.toString());
+	if (x.style.display === 'none') {
+        x.style.display = 'inline';
+    } else {
+        x.style.display = 'none';
+    }
+}
+	
+
+$(function() {
+	$.getJSON('jout.json', function(data) {
+  	$.each(data.jobs, function(i, f) {
+			var jobDiv = "<div class='w3-container'><h2>" +  f.JobTitle + "</h2>" +
+				"<p>" + f.OrganizationName + "</p>" + 
+				"<p>" + f.VacancyNumber + "</p>" + 
+				"<div id='desc" + i.toString() + "' style='display:none'><p>" + f.WhatYouWillDo + "</p>" + 
+				"<a href='" + f.Site + "' class='w3-btn w3-black' target='_blank'>Check this job out</a>" + 
+				"</div><button class='w3-btn w3-black' onclick='changeVis(" + i.toString() + ")'>" + 
+				"Toggle Discription</button><hr>";
+      $(jobDiv).appendTo("#jobdata");
+		});
+	});
+});
+</script>
+</head>
+
+<body style="margin:none;padding:none;">
+
+	<header class="w3-container w3-section w3-bottombar">	 
+		<img src="logo.jpg" class="w3-margin-bottom" style="width:250;height:auto;float:left;">
+		<h1 style="margin-top:50px"><b>SC17 Job List</b></h1>
+	</header>
+	<div id="jobdata" class="w3-container w3-margin-left w3-margin-right">
+		
+	</div>
+
+</body>
+</html>

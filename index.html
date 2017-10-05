@@ -31,7 +31,7 @@ $(function() {
 			var jobDiv = "<div id='" + j.toString() + "' class='job' style='display:none'></div>";
 			$(jobTab).appendTo("#tabbar");
 			$(jobDiv).appendTo("#jobdata");
-  		g.forEach(function(f, i) {
+  		Array.prototype.forEach.call(g, function(f, i) {
 				var jobDiv = "<div class='w3-container'><h2>" + f.JobTitle + "</h2>" +
 					"<p>" + f.OrganizationName + "</p>" + 
 					"<p>" + f.VacancyNumber + "</p>" + 

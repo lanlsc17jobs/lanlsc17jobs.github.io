@@ -1,31 +1,48 @@
 <html>
 <head>
 	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<script type="text/javascript" src="jquery-3.2.1.min.js"> </script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"> </script>
 
 <script>
 
-function changeVis(elem) {
-	var x = document.getElementById("desc" + elem.toString());
+function changeVis(elem, tab) {
+	var x = document.getElementById(tab.id.toString() + "desc" + elem.toString());
 	if (x.style.display === 'none') {
         x.style.display = 'inline';
     } else {
         x.style.display = 'none';
     }
 }
-	
+
+function openTab(tabName) {
+    var i;
+    var x = document.getElementsByClassName("job");
+    for (i = 0; i < x.length; i++) {
+       x[i].style.display = "none";
+    }
+    document.getElementById(tabName.id).style.display = "block";
+}
 
 $(function() {
 	$.getJSON('jout.json', function(data) {
-  	$.each(data.jobs, function(i, f) {
-			var jobDiv = "<div class='w3-container'><h2>" +  f.JobTitle + "</h2>" +
-				"<p>" + f.OrganizationName + "</p>" + 
-				"<p>" + f.VacancyNumber + "</p>" + 
-				"<div id='desc" + i.toString() + "' style='display:none'><p>" + f.WhatYouWillDo + "</p>" + 
-				"<a href='" + f.Site + "' class='w3-btn w3-black' target='_blank'>Check this job out</a>" + 
-				"</div><button class='w3-btn w3-black' onclick='changeVis(" + i.toString() + ")'>" + 
-				"Toggle Discription</button><hr>";
-      $(jobDiv).appendTo("#jobdata");
+		$.each(data.jobs, function(j, g) {
+			var jobTab = "<button class='w3-bar-item w3-button' onclick='openTab(" + j.toString() + 
+				")'>" + j.toString() + "</button>";
+			var jobDiv = "<div id='" + j.toString() + "' class='job' style='display:none'></div>";
+			$(jobTab).appendTo("#tabbar");
+			$(jobDiv).appendTo("#jobdata");
+  		g.forEach(function(f, i) {
+				var jobDiv = "<div class='w3-container'><h2>" + f.JobTitle + "</h2>" +
+					"<p>" + f.OrganizationName + "</p>" + 
+					"<p>" + f.VacancyNumber + "</p>" + 
+					"<div id='" + j.toString() + "desc" + i.toString() + "' style='display:none'><p>" + 
+					f.WhatYouWillDo + "</p>" + 
+					"<a href='" + f.Site + "' class='w3-btn w3-black' target='_blank'>Check this job out</a>" + 
+					"</div><button class='w3-btn w3-black' onclick='changeVis(" + 
+					i.toString() + "," + j.toString() + ")'>" + 
+					"Toggle Discription</button><hr>";
+      	$(jobDiv).appendTo("#" + j.toString());
+			});
 		});
 	});
 });
@@ -38,6 +55,7 @@ $(function() {
 		<img src="logo.jpg" class="w3-margin-bottom" style="width:250;height:auto;float:left;">
 		<h1 style="margin-top:50px"><b>SC17 Job List</b></h1>
 	</header>
+	<div id="tabbar" class="w3-bar w3-black"></div>
 	<div id="jobdata" class="w3-container w3-margin-left w3-margin-right">
 		
 	</div>

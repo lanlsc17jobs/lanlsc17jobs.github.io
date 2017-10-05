@@ -21,26 +21,34 @@ def grabInfo(source, url):
     #contents = {"vacancy number": irc, "job title" : desc.split("Job Title")[1].split("Location")[0]}
     return contents
 
-keyword = "ccs"
+if len(sys.argv) < 2:
+    print "usage: python scrapeFor.py keyword1 keyword2 ... keywordN"
+    sys.exit()
+
+keywords = sys.argv[1:]
 jsonFile = "jout.json"
-info = []
-
+info = {}
 browser = webdriver.Firefox()
-browser.get('https://jobszp1.lanl.gov/OA_HTML/OA.jsp?OAFunc=IRC_VIS_HOME_ALL_JOBS')
-browser.find_element_by_id('Keywords').send_keys(keyword)
-browser.find_element_by_id('Go').click()
 
-i = 0
-hasLink = True
-while hasLink:
-    try:
-        elem = browser.find_element_by_id('JobSearchTable:JobName:' + str(i))
-        elem.click()
-        info.append(grabInfo(browser.page_source, browser.current_url))
-        i += 1
-        browser.back()
-    except:
-        hasLink = False
+for keyword in keywords:
+    keySearch = []
+    browser.get('https://jobszp1.lanl.gov/OA_HTML/OA.jsp?OAFunc=IRC_VIS_HOME_ALL_JOBS')
+    browser.find_element_by_id('Keywords').clear()
+    browser.find_element_by_id('Keywords').send_keys(keyword)
+    browser.find_element_by_id('Go').click()
+
+    i = 0
+    hasLink = True
+    while hasLink:
+        try:
+            elem = browser.find_element_by_id('JobSearchTable:JobName:' + str(i))
+            elem.click()
+            keySearch.append(grabInfo(browser.page_source, browser.current_url))
+            i += 1
+            browser.back()
+        except:
+            hasLink = False
+    info[keyword] = keySearch
 
 browser.close()
 

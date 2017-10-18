@@ -5,12 +5,14 @@
 
 <script>
 
-function changeVis(elem, tab) {
+function changeVis(elem, tab, button) {
 	var x = document.getElementById(tab.id.toString() + "desc" + elem.toString());
 	if (x.style.display === 'none') {
         x.style.display = 'inline';
+				button.innerHTML = "Hide Description"
     } else {
         x.style.display = 'none';
+				button.innerHTML = "Show Description"
     }
 }
 
@@ -32,15 +34,14 @@ $(function() {
 			$(jobTab).appendTo("#tabbar");
 			$(jobDiv).appendTo("#jobdata");
   		Array.prototype.forEach.call(g, function(f, i) {
-				var jobDiv = "<div class='w3-container'><h2>" + f.JobTitle + "</h2>" +
+				var jobDiv = "<div class='w3-container w3-bottombar'><h2>" + f.JobTitle + "</h2>" +
 					"<p>" + f.OrganizationName + "</p>" + 
 					"<p>" + f.VacancyNumber + "</p>" + 
 					"<div id='" + j.toString() + "desc" + i.toString() + "' style='display:none'><p>" + 
 					f.WhatYouWillDo + "</p>" + 
-					"<a href='" + f.Site + "' class='w3-btn w3-black' target='_blank'>Check this job out</a>" + 
+					"<a href='" + f.Site + "' class='w3-btn w3-black' target='_blank' style='margin-bottom:10px;'>Check this job out</a>" + 
 					"</div><button class='w3-btn w3-black' onclick='changeVis(" + 
-					i.toString() + "," + j.toString() + ")'>" + 
-					"Toggle Discription</button><hr>";
+					i.toString() + "," + j.toString() + ", this)' style='margin-bottom:10px;'>Show Description</button>";
       	$(jobDiv).appendTo("#" + j.toString());
 			});
 		});
@@ -51,12 +52,12 @@ $(function() {
 
 <body style="margin:none;padding:none;">
 
-	<header class="w3-container w3-section w3-bottombar">	 
+	<div class="w3-container w3-bottombar" style="position:fixed;top:0;width:100%;padding:0;background-color:white;margin:0;">	 
 		<img src="logo.jpg" class="w3-margin-bottom" style="width:250;height:auto;float:left;">
 		<h1 style="margin-top:50px"><b>SC17 Job List</b></h1>
-	</header>
-	<div id="tabbar" class="w3-bar w3-black"></div>
-	<div id="jobdata" class="w3-container w3-margin-left w3-margin-right">
+		<div id="tabbar" class="w3-bar w3-black"></div><br>
+	</div>
+	<div id="jobdata" class="w3-container w3-margin-left w3-margin-right" style="margin-top:250px;">
 		
 	</div>
 

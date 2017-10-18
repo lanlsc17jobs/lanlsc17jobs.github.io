@@ -2,6 +2,7 @@
 #dumps content to json
 
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 import bs4, json, sys
 
 def grabInfo(source, url):
@@ -16,8 +17,11 @@ def grabInfo(source, url):
     splitOn = ["Job Title", "Location", "Organization Name", "What You Will Do", "What You Need"]
     sp = desc.split("Job Title")
     for s in range(len(splitOn) - 1):
-        sp = sp[1].split(splitOn[s + 1])
-        contents[splitOn[s].replace(" ", "")] = sp[0]
+        try:
+            sp = sp[1].split(splitOn[s + 1])
+            contents[splitOn[s].replace(" ", "")] = sp[0]
+        except:
+            pass
     #contents = {"vacancy number": irc, "job title" : desc.split("Job Title")[1].split("Location")[0]}
     return contents
 
@@ -37,18 +41,14 @@ for keyword in keywords:
     browser.find_element_by_id('Keywords').send_keys(keyword)
     browser.find_element_by_id('Go').click()
 
-    i = 0
-    hasLink = True
-    while hasLink:
-        try:
-            elem = browser.find_element_by_id('JobSearchTable:JobName:' + str(i))
-            elem.click()
-            keySearch.append(grabInfo(browser.page_source, browser.current_url))
-            i += 1
-            browser.back()
-        except:
-            hasLink = False
-    info[keyword] = keySearch
+    elems = browser.find_elements_by_class_name("xar")
+    for i in range(len(elems)):
+        elem = browser.find_elements_by_class_name("xar")[i]
+        elem.click()
+        keySearch.append(grabInfo(browser.page_source, browser.current_url))
+        browser.back()
+
+    info[keyword.replace(" ", "")] = keySearch
 
 browser.quit()
 

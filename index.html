@@ -4,6 +4,10 @@
 <script type="text/javascript" src="jquery-3.2.1.min.js"> </script>
 
 <script>
+function formatTitle(str) {
+	var splits = str.split(/([A-Z][a-z]+[^A-Z])/);
+	return splits.join(' ');
+}
 
 function changeVis(elem, tab, button) {
 	var x = document.getElementById(tab.id.toString() + "desc" + elem.toString());
@@ -29,7 +33,7 @@ $(function() {
 	$.getJSON('jout.json', function(data) {
 		$.each(data.jobs, function(j, g) {
 			var jobTab = "<button class='w3-bar-item w3-button' onclick='openTab(" + j.toString() + 
-				")'>" + j.toString() + "</button>";
+				")'>" + formatTitle(j.toString()) + "</button>";
 			var jobDiv = "<div id='" + j.toString() + "' class='job' style='display:none'></div>";
 			$(jobTab).appendTo("#tabbar");
 			$(jobDiv).appendTo("#jobdata");
